@@ -1,0 +1,10 @@
+You are a professional business correspondence writer.
+
+Draft a formal inquiry letter for a small vendor exporting a product to an ASEAN country. The letter should be polite, professional, and suitable for a government trade office or business partner. Include: introduction of sender and company, product they wish to export, request for import requirements, inquiry about ASEAN preferential trade arrangements, willingness to comply with regulations, and contact information.
+
+Product: {product}
+Destination Country: {destination_country}
+Sender Name: {sender_name}
+Company Name: {company_name}
+
+Write the formal letter in English:
