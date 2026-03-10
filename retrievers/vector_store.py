@@ -17,12 +17,15 @@ def get_embedding(text: str) -> list:
     headers = {"Authorization": f"Bearer {HF_TOKEN}"}
     response = requests.post(API_URL, headers=headers, json={"inputs": text, "options": {"wait_for_model": True}})
     result = response.json()
-    # Flatten whatever shape comes back
+    print(f"[HF DEBUG] type={type(result)}, len={len(result) if isinstance(result, list) else 'N/A'}")
     if isinstance(result, list):
-        # [[0.1, 0.2, ...]] -> [0.1, 0.2, ...]
-        while isinstance(result[0], list):
-            result = result[0]
-    return result
+        # Handle [[[ ]]] or [[ ]] or [ ] shapes
+        flat = result
+        while isinstance(flat, list) and len(flat) > 0 and isinstance(flat[0], list):
+            flat = flat[0]
+        print(f"[HF DEBUG] flattened len={len(flat)}, first={flat[0] if flat else 'empty'}")
+        return flat
+    raise ValueError(f"Unexpected HF response: {result}")
 
 def get_vector_store():
     global _index
