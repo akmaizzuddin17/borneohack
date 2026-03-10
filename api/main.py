@@ -28,6 +28,9 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def auto_ingest_on_startup():
+    if os.environ.get("DISABLE_AUTO_INGEST", "false").lower() == "true":
+        print("[STARTUP] Auto-ingest disabled via env var.")
+        return
     try:
         from chains.ingest import ingest_pdfs
         print("[STARTUP] Auto-ingesting PDFs from data folder...")
@@ -146,3 +149,4 @@ async def ingest_all():
         return {"message": "All PDFs ingested successfully", "stats": stats}
     except Exception as e:
         return _error(e)
+
