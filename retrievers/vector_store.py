@@ -17,8 +17,11 @@ def get_embedding(text: str) -> list:
     headers = {"Authorization": f"Bearer {HF_TOKEN}"}
     response = requests.post(API_URL, headers=headers, json={"inputs": text, "options": {"wait_for_model": True}})
     result = response.json()
-    if isinstance(result, list) and isinstance(result[0], list):
-        return result[0]
+    # Flatten whatever shape comes back
+    if isinstance(result, list):
+        # [[0.1, 0.2, ...]] -> [0.1, 0.2, ...]
+        while isinstance(result[0], list):
+            result = result[0]
     return result
 
 def get_vector_store():
