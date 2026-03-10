@@ -1,7 +1,20 @@
-import axios from "axios";
-
+import axios, { AxiosError } from "axios";
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
-const api = axios.create({ baseURL: API_BASE, headers: { "Content-Type": "application/json" } });
+const api = axios.create({ baseURL: API_BASE, headers: { "Content-Type": "application/json" }, timeout: 120000 });
+
+// Add response interceptor for better error messages
+api.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.code === "ECONNABORTED" || error.message.includes("timeout")) {
+      throw new Error("? The server is waking up from sleep. Please wait 30-60 seconds and try again.");
+    }
+    if (!error.response) {
+      throw new Error("?? Server is starting up. Please wait a moment and try again. (First request after inactivity may take up to 1 minute)");
+    }
+    throw error;
+  }
+);
 
 export interface QueryResponse { answer: string; sources: { source: string; page: string; country: string }[]; }
 export interface ChecklistResponse { checklist: string; product: string; destination_country: string; }
@@ -16,7 +29,6 @@ export interface FormDResponse {
   explanation: string;
   answers: Record<string, string>;
 }
-
 export async function queryTrade(question: string): Promise<QueryResponse> {
   const res = await api.post("/api/query", { question }); return res.data;
 }
