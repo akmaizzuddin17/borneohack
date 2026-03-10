@@ -4,10 +4,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from pinecone import Pinecone
-from config import CHUNK_SIZE, CHUNK_OVERLAP, EMBEDDING_MODEL_NAME, PINECONE_API_KEY, PINECONE_INDEX_NAME
+from config import CHUNK_SIZE, CHUNK_OVERLAP, PINECONE_API_KEY, PINECONE_INDEX_NAME
 
+HF_TOKEN = os.environ.get("HUGGINGFACEHUB_API_TOKEN", "")
+MODEL_ID = "sentence-transformers/all-MiniLM-L6-v2"
 
 def ingest_pdfs(pdf_dir: str) -> dict:
     pdf_paths = sorted(
@@ -47,7 +49,11 @@ def ingest_pdfs(pdf_dir: str) -> dict:
         else:
             chunk.metadata["country"] = "ASEAN"
 
-    embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+    embeddings = HuggingFaceEndpointEmbeddings(
+        model=MODEL_ID,
+        huggingfacehub_api_token=HF_TOKEN,
+    )
+
     pc = Pinecone(api_key=PINECONE_API_KEY)
     index = pc.Index(PINECONE_INDEX_NAME)
 
