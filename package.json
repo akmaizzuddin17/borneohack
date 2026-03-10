@@ -1,0 +1,6 @@
+{
+  "name": "borneohack",
+  "scripts": {
+    "build": "cd frontend && npm install && npx vite build"
+  }
+}
