@@ -6,7 +6,6 @@ langchain-huggingface==0.1.2
 langchain-text-splitters==0.3.8
 langsmith==0.3.45
 pinecone==6.0.0
-sentence-transformers==3.0.1
 pypdf==4.3.1
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
@@ -17,3 +16,4 @@ groq==0.11.0
 httpx==0.27.0
 cryptography
 pydantic==2.12.5
+requests==2.32.5
