@@ -7,12 +7,12 @@ load_dotenv()
 GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
 LLM_MODEL_NAME: str = os.getenv("LLM_MODEL_NAME", "llama-3.1-8b-instant")
 
-# ── Embeddings (local, free, no API key needed) ─────────────────
+# ── Embeddings ──────────────────────────────────────────────────
 EMBEDDING_MODEL_NAME: str = os.getenv("EMBEDDING_MODEL_NAME", "all-MiniLM-L6-v2")
 
-# ── ChromaDB ────────────────────────────────────────────────────
-CHROMA_PERSIST_DIR: str = os.getenv("CHROMA_PERSIST_DIR", "./chroma_db")
-CHROMA_COLLECTION_NAME: str = os.getenv("CHROMA_COLLECTION_NAME", "asean_trade_docs")
+# ── Pinecone ────────────────────────────────────────────────────
+PINECONE_API_KEY: str = os.getenv("PINECONE_API_KEY", "")
+PINECONE_INDEX_NAME: str = os.getenv("PINECONE_INDEX_NAME", "asean-trade-docs")
 
 # ── Data ────────────────────────────────────────────────────────
 PDF_DATA_DIR: str = os.getenv("PDF_DATA_DIR", "./data")

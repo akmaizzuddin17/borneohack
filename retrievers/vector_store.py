@@ -3,18 +3,52 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_chroma import Chroma
-from config import CHROMA_PERSIST_DIR, CHROMA_COLLECTION_NAME, EMBEDDING_MODEL_NAME
+from langchain_core.vectorstores import VectorStore
+from langchain_core.documents import Document
+from pinecone import Pinecone
+from config import EMBEDDING_MODEL_NAME, PINECONE_API_KEY, PINECONE_INDEX_NAME
+from typing import List
 
-_vector_store = None
+_embeddings = None
+_index = None
 
-def get_vector_store() -> Chroma:
-    global _vector_store
-    if _vector_store is None:
-        embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
-        _vector_store = Chroma(
-            collection_name=CHROMA_COLLECTION_NAME,
-            embedding_function=embeddings,
-            persist_directory=CHROMA_PERSIST_DIR,
-        )
-    return _vector_store
+def get_vector_store():
+    global _embeddings, _index
+    if _index is None:
+        _embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+        pc = Pinecone(api_key=PINECONE_API_KEY)
+        _index = pc.Index(PINECONE_INDEX_NAME)
+    return PineconeRetrieverWrapper(_index, _embeddings)
+
+
+class PineconeRetrieverWrapper:
+    def __init__(self, index, embeddings):
+        self.index = index
+        self.embeddings = embeddings
+
+    def as_retriever(self, search_kwargs=None):
+        k = (search_kwargs or {}).get("k", 8)
+        return PineconeRetriever(self.index, self.embeddings, k)
+
+
+class PineconeRetriever:
+    def __init__(self, index, embeddings, k=8):
+        self.index = index
+        self.embeddings = embeddings
+        self.k = k
+
+    def invoke(self, query: str) -> List[Document]:
+        embedding = self.embeddings.embed_query(query)
+        results = self.index.query(vector=embedding, top_k=self.k, include_metadata=True)
+        docs = []
+        for match in results.get("matches", []):
+            meta = match.get("metadata", {})
+            docs.append(Document(
+                page_content=meta.get("text", ""),
+                metadata={
+                    "source": meta.get("source", ""),
+                    "page": meta.get("page", ""),
+                    "country": meta.get("country", ""),
+                }
+            ))
+        return docs

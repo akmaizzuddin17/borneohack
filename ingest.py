@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain.vectorstores import Pinecone as PineconeVectorStore
 from pinecone import Pinecone
 from config import CHUNK_SIZE, CHUNK_OVERLAP, EMBEDDING_MODEL_NAME, PINECONE_API_KEY, PINECONE_INDEX_NAME
 
@@ -44,31 +45,18 @@ def ingest_pdfs(pdf_dir: str) -> dict:
             chunk.metadata["country"] = "Philippines"
         elif "singapore" in source:
             chunk.metadata["country"] = "Singapore"
-        else:
+        elif "myanmar" in source:
+            chunk.metadata["country"] = "Myanmar"
+        elif "asean" in source or "export_and_import" in source or "guidelines" in source or "ilp" in source:
             chunk.metadata["country"] = "ASEAN"
+        else:
+            chunk.metadata["country"] = "General"
 
     embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
     pc = Pinecone(api_key=PINECONE_API_KEY)
     index = pc.Index(PINECONE_INDEX_NAME)
+    vector_store = PineconeVectorStore(index, embeddings, "text")
+    vector_store.add_documents(chunks)
+    print(f"Upserted {len(chunks)} chunks into Pinecone")
 
-    vectors = []
-    for i, chunk in enumerate(chunks):
-        embedding = embeddings.embed_query(chunk.page_content)
-        vectors.append({
-            "id": f"chunk-{i}",
-            "values": embedding,
-            "metadata": {
-                "text": chunk.page_content,
-                "source": chunk.metadata.get("source", ""),
-                "page": str(chunk.metadata.get("page", "")),
-                "country": chunk.metadata.get("country", "ASEAN"),
-            }
-        })
-
-    batch_size = 100
-    for i in range(0, len(vectors), batch_size):
-        index.upsert(vectors=vectors[i:i+batch_size])
-        print(f"  Upserted batch {i//batch_size + 1}")
-
-    print(f"Stored {len(chunks)} chunks into Pinecone index '{PINECONE_INDEX_NAME}'")
     return {"pdfs_processed": len(pdf_paths), "total_pages": len(all_docs), "total_chunks": len(chunks)}
