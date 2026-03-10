@@ -1,6 +1,0 @@
-{
-  "name": "borneohack",
-  "scripts": {
-    "build": "cd frontend && npm install && ./node_modules/.bin/vite build"
-  }
-}
