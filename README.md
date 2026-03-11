@@ -1,75 +1,72 @@
 # ASEAN Trade Compass 🧭
-AI-powered cross-border trade assistant for Borneo vendors — powered by **Groq API**.
+AI-powered cross-border trade assistant for Borneo vendors. Built to simplify export compliance across ASEAN countries.
 
-## Quick Start
+## 📖 Project Details
+This full-stack application provides vendors in Borneo with real-time, AI-driven guidance on cross-border trade regulations, logistics planning, and document compliance (like Form D). 
 
-### Prerequisites
+The platform leverages **FastAPI** on the backend equipped with **Langchain** and **Pinecone** for document retrieval, powered by the **Groq API** for incredibly fast AI inference. The frontend is built using **React** and **Vite** for a seamless, App-like mobile experience.
+
+---
+
+## 🚀 Setup Instructions
+
+**Prerequisites:**
 - [Python 3.11+](https://python.org)
 - [Node.js LTS](https://nodejs.org)
-- Free Groq API key from [https://console.groq.com](https://console.groq.com)
+- Free Groq API key from [console.groq.com](https://console.groq.com)
+- Free Pinecone API key & Index from [pinecone.io](https://pinecone.io)
 
-### 1. Setup (run once)
+**1. Clone the repository**
+```bash
+git clone https://github.com/your-username/borneohack.git
+cd borneohack
+```
+
+**2. Configure Environment Variables**
+Open `.env` (or rename `dot_env_template` to `.env`) and add your keys:
+```env
+GROQ_API_KEY=gsk_your_key_here
+PINECONE_API_KEY=pcsk_your_pinecone_key
+PINECONE_INDEX_NAME=your_index_name
+LLM_MODEL_NAME=llama-3.1-8b-instant
+EMBEDDING_MODEL_NAME=all-MiniLM-L6-v2
+```
+
+**3. Run the application**
+Run the automated setup scripts (requires 2 terminal windows):
 ```powershell
+# Terminal 1 - Start the Python Backend
 .\setup.bat
-```
-
-### 2. Add your Groq API key
-Open `.env` and replace `your_groq_api_key_here`:
-```
-GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxx
-```
-
-### 3. Run (2 terminals)
-
-**Terminal 1 — Backend:**
-```powershell
 .\start_backend.bat
-```
 
-**Terminal 2 — Frontend:**
-```powershell
+# Terminal 2 - Start the React Frontend
 .\start_frontend.bat
 ```
-
-Open: **http://localhost:5173**
-
-### 4. Load PDFs (first time only)
-After backend is running, run:
-```powershell
-.\ingest_data.bat
-```
-Or place your PDFs in the `data/` folder — they auto-ingest on startup.
+Navigate to **http://localhost:5173** to view the app!
 
 ---
 
-## Groq Models (set in .env as LLM_MODEL_NAME)
-| Model | Speed | Quality |
-|-------|-------|---------|
-| `llama-3.1-8b-instant` | ⚡ Fastest | Good (default) |
-| `llama-3.3-70b-versatile` | Slower | Best |
-| `mixtral-8x7b-32768` | Medium | Long context |
+## 🤖 AI Disclosure
+**Clear, Honest, and Transparent AI Usage**:
+During the ideation, development, and debugging phases of this project, we explicitly utilized Artificial Intelligence tools as collaborative assistants. 
+
+AI was used to:
+1. **Frontend UI Generation:** The entire React user interface was generated using **Google Stitch**.
+2. **Core App Development:** The core logic, architecture planning, debugging, and RAG configuration were developed using **Antigravity powered by Opus 4.6** as the core AI assistant.
+3. **Core Features:** The application itself is entirely centered around AI using the Groq API (LLaMA 3) to function as a domain-expert agent analyzing trade documents via a Retrieval-Augmented Generation (RAG) pipeline built with LangChain and Pinecone.
+
+The foundational idea, prompt engineering mechanics, and final system integration were guided by human developers, utilizing AI primarily to accelerate coding velocity and resolve technical blockers.
 
 ---
 
-## Project Structure
+## 🗂️ Project Structure
 ```
 borneohack/
 ├── api/main.py              ← FastAPI backend
-├── chains/
-│   ├── qa_chain.py          ← Q&A (Groq)
-│   ├── checklist_chain.py   ← Compliance checklist (Groq)
-│   ├── translation_chain.py ← Letter + translation (Groq)
-│   ├── form_d_chain.py      ← Form D checker (Groq)
-│   └── ingest.py            ← PDF ingestion
-├── retrievers/vector_store.py
-├── prompts/                 ← Prompt templates
-├── data/                    ← Put your PDFs here
-├── frontend/                ← React + Vite app
-│   └── src/
-│       ├── pages/
-│       ├── components/
-│       └── lib/
-├── config.py                ← All config (reads .env)
-├── .env                     ← Your API keys (never commit!)
-└── requirements.txt
+├── chains/                  ← RAG & Langchain Logic
+├── retrievers/              ← Pinecone Vector Search
+├── frontend/                ← React + Vite App
+├── Procfile                 ← Railway Start instructions
+├── config.py                ← Environment verification
+└── requirements.txt         ← Python dependencies (CPU-optimized)
 ```
