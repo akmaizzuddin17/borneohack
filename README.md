@@ -86,27 +86,26 @@ Before the AI can answer questions, you need to load your trade regulation PDFs 
 
    ```
    borneohack/
-   └── documents/
-       ├── form_d_guidelines.pdf
-       ├── asean_trade_regulations.pdf
+   └── data/
+       ├── Asean_requirements.pdf
        └── ...
    ```
 
 2. Run the ingestion script to embed and upload them to Pinecone:
 
    ```bash
-   python ingest.py
+   .\ingest_data.bat
    ```
 
    This script will:
-   - Load all PDFs from the `documents/` folder
+   - Load all PDFs from the `data/` folder
    - Split them into chunks using LangChain's text splitter
    - Generate embeddings using `all-MiniLM-L6-v2`
    - Upsert all vectors into your Pinecone index
 
 3. Wait for the script to complete. You should see confirmation that vectors were uploaded. You can verify in the Pinecone dashboard under your index's **Vectors** tab.
 
-> 💡 Re-run `ingest.py` whenever you add new documents. Duplicate vectors won't affect results, but you can clear the index first from the Pinecone dashboard if needed.
+> 💡 Re-run `.\ingest_data.bat` whenever you add new documents. Duplicate vectors won't affect results, but you can clear the index first from the Pinecone dashboard if needed.
 
 ---
 
@@ -133,16 +132,20 @@ Navigate to **http://localhost:5173** to view the app!
 
 ```
 borneohack/
-├── api/main.py              ← FastAPI backend
+├── api/                     ← FastAPI backend
 ├── chains/                  ← RAG & LangChain logic
-├── retrievers/              ← Pinecone vector search
-├── documents/               ← Place your PDFs here for ingestion
-├── ingest.py                ← PDF ingestion script (run once before starting)
+├── retrievers/              ← ChromaDB vector search
+├── prompts/                 ← LLM prompt templates
+├── data/                    ← Place your PDFs here before ingesting
+├── chroma_db/               ← Auto-generated local vector store (created after ingestion)
 ├── frontend/                ← React + Vite app
+├── ingest.py                ← Core ingestion logic
+├── ingest_data.bat          ← Run this to ingest PDFs (Windows)
+├── vector_store.py          ← Vector store utilities
 ├── Procfile                 ← Railway start instructions
 ├── config.py                ← Environment verification
+├── dot_env_template         ← Rename to .env and fill in your keys
 └── requirements.txt         ← Python dependencies (CPU-optimized)
-```
 
 ---
 
@@ -166,5 +169,6 @@ The foundational idea, prompt engineering mechanics, and final system integratio
 |---|---|
 | `PINECONE_INDEX_NAME not found` | Ensure the index name in `.env` exactly matches the one in Pinecone dashboard |
 | `Dimension mismatch` error on ingest | Confirm your Pinecone index was created with **384 dimensions** |
-| Empty AI responses | Run `ingest.py` first — the vector store must be populated before querying |
+| Empty AI responses | Run `.\ingest_data.bat` first — the vector store must be populated before querying |
 | Groq rate limit errors | The free tier has generous limits; wait a moment and retry |
+|  Backend fails to start | Run `.\setup.bat` first to install Python dependencies | 
