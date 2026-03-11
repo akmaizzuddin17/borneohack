@@ -134,7 +134,7 @@ Navigate to **http://localhost:5173** to view the app!
 borneohack/
 ├── api/                     ← FastAPI backend
 ├── chains/                  ← RAG & LangChain logic
-├── retrievers/              ← ChromaDB vector search
+├── retrievers/              ← Pinecone vector search
 ├── prompts/                 ← LLM prompt templates
 ├── data/                    ← Place your PDFs here before ingesting
 ├── chroma_db/               ← Auto-generated local vector store (created after ingestion)
@@ -171,4 +171,4 @@ The foundational idea, prompt engineering mechanics, and final system integratio
 | `Dimension mismatch` error on ingest | Confirm your Pinecone index was created with **384 dimensions** |
 | Empty AI responses | Run `.\ingest_data.bat` first — the vector store must be populated before querying |
 | Groq rate limit errors | The free tier has generous limits; wait a moment and retry |
-|  Backend fails to start | Run `.\setup.bat` first to install Python dependencies | 
+| Backend fails to start | Run `.\setup.bat` first to install Python dependencies | 
