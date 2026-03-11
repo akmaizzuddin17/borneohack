@@ -10,8 +10,6 @@ The platform leverages **FastAPI** on the backend equipped with **Langchain** an
 
 ## 🚀 Setup Instructions
 
-### Option 1: Local Development (Windows)
-
 **Prerequisites:**
 - [Python 3.11+](https://python.org)
 - [Node.js LTS](https://nodejs.org)
@@ -46,33 +44,18 @@ Run the automated setup scripts (requires 2 terminal windows):
 ```
 Navigate to **http://localhost:5173** to view the app!
 
-
-### Option 2: Cloud Deployment (Vercel + Railway)
-For continuous 24/7 uptime without sleep constraints, follow these deployment steps:
-
-**Deploy the Backend (Railway):**
-1. Use the [Railway CLI](https://docs.railway.com/guides/cli) to deploy the backend directly bypassing GitHub: `railway up`. 
-2. Add all 5 `.env` variables from above to your Railway project settings.
-3. Generate a public Railway Domain URL in the Networking tab.
-
-**Deploy the Frontend (Vercel):**
-1. Import the repository to Vercel.
-2. Under "Root Directory", select `frontend`.
-3. Add a new Environment Variable `VITE_API_BASE` and set it to your public Railway domain (e.g. `https://your-api.up.railway.app`).
-4. Click Deploy.
-
 ---
 
 ## 🤖 AI Disclosure
 **Clear, Honest, and Transparent AI Usage**:
-During the ideation, development, and debugging phases of this project, we explicitly utilized Artificial Intelligence tools (specifically Claude and Gemini) as collaborative assistants. 
+During the ideation, development, and debugging phases of this project, we explicitly utilized Artificial Intelligence tools as collaborative assistants. 
 
 AI was used to:
-1. **Architecture Planning:** Assisting with selecting the optimal deployment stack (Vercel for React, Railway for FastAPI) and writing the necessary configuration files (`Procfile`, `.python-version`).
-2. **Troubleshooting & Optimization:** Debugging dependency bloat (swapping to CPU-only PyTorch to fit within remote free tiers) and resolving deployment environment variable crashes.
+1. **Frontend UI Generation:** The entire React user interface was generated using **Google Stitch**.
+2. **Core App Development:** The core logic, architecture planning, debugging, and RAG configuration were developed using **Antigravity powered by Opus 4.6** as the core AI assistant.
 3. **Core Features:** The application itself is entirely centered around AI using the Groq API (LLaMA 3) to function as a domain-expert agent analyzing trade documents via a Retrieval-Augmented Generation (RAG) pipeline built with LangChain and Pinecone.
 
-The foundational idea, UI/UX design decisions, prompt engineering mechanics, and final system integration were guided and implemented by human developers using AI solely to accelerate the coding velocity and resolve technical blockers.
+The foundational idea, prompt engineering mechanics, and final system integration were guided by human developers, utilizing AI primarily to accelerate coding velocity and resolve technical blockers.
 
 ---
 
