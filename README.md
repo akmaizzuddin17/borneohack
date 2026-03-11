@@ -1,11 +1,11 @@
 # ASEAN Trade Compass 🧭
-> AI-powered cross-border trade assistant for Borneo vendors. Built to simplify export compliance across ASEAN countries.
+> AI-powered cross-border trade assistant for Asean vendors whether small or big entreprenuer. Built to simplify export compliance across ASEAN countries.
 
 ---
 
 ## 📖 Project Details
 
-This full-stack application provides vendors in Borneo with real-time, AI-driven guidance on cross-border trade regulations, logistics planning, and document compliance (like Form D).
+This full-stack application provides vendors in Asean with real-time, AI-driven guidance on cross-border trade regulations, logistics planning, and document compliance (like Form D).
 
 The platform leverages **FastAPI** on the backend equipped with **LangChain** and **Pinecone** for document retrieval, powered by the **Groq API** for incredibly fast AI inference. The frontend is built using **React** and **Vite** for a seamless, app-like mobile experience.
 
