@@ -9,6 +9,8 @@ This full-stack application provides vendors in Asean with real-time, AI-driven 
 
 The platform leverages **FastAPI** on the backend equipped with **LangChain** and **Pinecone** for document retrieval, powered by the **Groq API** for incredibly fast AI inference. The frontend is built using **React** and **Vite** for a seamless, app-like mobile experience.
 
+Project report : https://docs.google.com/document/d/1_gbEJaaLtvich3sKuBmKFtGWJpKg0d5orbi56E71yT8/edit?usp=sharing
+
 Link youtube demonstration : https://youtu.be/PZy9ys33DcU
 
 Link app live demonstration : https://borneohack-frontend.vercel.app/
